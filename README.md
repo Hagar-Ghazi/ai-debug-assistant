@@ -62,14 +62,14 @@ Syntax Error · Logic Error · Runtime Exception · Type Error · Scope/Closure 
 |---|---|---|
 | **Web Framework** | FastAPI | [fastapi.tiangolo.com](https://fastapi.tiangolo.com) |
 | **ASGI Server** | Uvicorn | [uvicorn.org](https://uvicorn.org) |
-| **Local AI Runtime** | Ollama | [ollama.com](https://ollama.com) |
+| **Local AI Runtime** | Ollama | [ollama.com](https://ollama.com/) |
 | **Local AI Model** | Aya Expanse | [ollama.com/library/aya-expanse](https://ollama.com/library/aya-expanse) |
 | **Cloud AI** | Gemini 2.5 Flash | [aistudio.google.com](https://aistudio.google.com) |
 | **ORM** | SQLAlchemy | [sqlalchemy.org](https://sqlalchemy.org) |
 | **Database** | SQLite | [sqlite.org](https://sqlite.org) |
 | **Templating** | Jinja2 | [jinja.palletsprojects.com](https://jinja.palletsprojects.com) |
 | **Password Hashing** | bcrypt | [pypi.org/project/bcrypt](https://pypi.org/project/bcrypt) |
-| **Session Middleware** | Starlette | [starlette.io](https://starlette.io) |
+| **Session Middleware** | Starlette | [starlette.io](https://starlette.dev/) |
 | **Package Manager** | uv | [docs.astral.sh/uv](https://docs.astral.sh/uv) |
 | **Cloud Deployment** | Railway | [railway.app](https://railway.app) |
 | **Animations** | Lottie Web | [lottiefiles.com](https://lottiefiles.com) |
