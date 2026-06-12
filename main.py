@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles  # <-- Added import
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 from dotenv import load_dotenv
@@ -10,7 +10,6 @@ import models
 import ai_service
 from database import engine, get_db
 import bcrypt
-from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
@@ -21,14 +20,16 @@ load_dotenv()
 models.Base.metadata.create_all(bind = engine)
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET", "change-me-in-production-please"))
-templates = Jinja2Templates(directory="templates")
 
+# Enforce clean absolute directory path mechanics for production stability
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Mount the static directory so FastAPI can read your CSS and animations
-current_dir = os.path.dirname(os.path.abspath(__file__))
-static_dir = os.path.join(current_dir, "static")
-app.mount("/static", StaticFiles(directory=static_dir), name="static") # Mount using the absolute production path
-# app.mount("/static", StaticFiles(directory="static"), name="static") 
+# Configure absolute pathing for templates
+templates = Jinja2Templates(directory=os.path.join(base_dir, "templates"))
+
+# Configure absolute pathing for static files (CSS, animations)
+static_dir = os.path.join(base_dir, "static")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 
 #-------------------------------------------
@@ -55,7 +56,6 @@ def get_current_user(request: Request, db: Session) -> models.User | None:
     if not user_id:
         return None
     return db.query(models.User).filter(models.User.id == user_id).first()
-
 
 
 #-------------------------------------------
@@ -85,7 +85,6 @@ async def dashboard(request: Request, db: Session = Depends(get_db)):
     )
 
 
-
 #-------------------------------------------
 #           Registration 
 #-------------------------------------------
@@ -107,7 +106,6 @@ async def register_submit(
     password: str = Form(...),
     db: Session = Depends(get_db),
 ):
-    # Check for existing username or email
     existing = (
         db.query(models.User)
         .filter((models.User.username == username) | (models.User.email == email))
@@ -139,7 +137,6 @@ async def register_submit(
 #           Login 
 #-------------------------------------------
 
-
 @app.get("/login", response_class = HTMLResponse)
 async def login_page(request: Request):
     return templates.TemplateResponse(
@@ -147,7 +144,6 @@ async def login_page(request: Request):
         name = "login.html",
         context = {"error": ""},
     )
-
 
 
 @app.post("/login", response_class = HTMLResponse)
@@ -170,7 +166,6 @@ async def login_submit(
     return RedirectResponse("/", status_code=302)
 
 
-
 #-------------------------------------------
 #          Logout
 #-------------------------------------------
@@ -179,7 +174,6 @@ async def login_submit(
 async def logout(request: Request):
     request.session.clear()
     return RedirectResponse("/login", status_code = 302)
-
 
 
 #-------------------------------------------
@@ -197,7 +191,6 @@ async def submit_issue(
     if not user:
         return RedirectResponse("/login", status_code = 302)
 
-    # Create the session row immediately with PENDING status
     review = models.ReviewSession(
         user_id = user.id,
         language = language,
@@ -208,7 +201,6 @@ async def submit_issue(
     db.commit()
     db.refresh(review)
 
-    # Call the AI service 
     try:
         result = ai_service.analyze_issue(language, issue_description)
         review.ai_category = result["category"]
