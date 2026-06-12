@@ -32,7 +32,7 @@ https://github.com/user-attachments/assets/ba419c24-a7ff-4372-ba87-d06e774ea1d6
 
 ## What It Does
 
-Submit any programming issue in natural language — a stack trace, a logic fault, an unexpected runtime behavior. The inference pipeline analyzes the input against a structured prompt schema and returns three outputs: an error classification drawn from ten precisely defined categories, a difficulty rating calibrated to the depth of knowledge required to resolve it, and a targeted learning recommendation scoped to the exact gap the issue exposes — not a generic suggestion, but a specific concept, API, or documentation reference engineered to help you fix the problem and internalize the prevention.
+Submit any programming issue in natural language like a stack trace, a logic fault, an unexpected runtime behavior. The inference pipeline analyzes the input against a structured prompt schema and returns three outputs: an error classification drawn from ten precisely defined categories, a difficulty rating calibrated to the depth of knowledge required to resolve it and a targeted learning recommendation scoped to the exact gap the issue exposes not a generic suggestion but a specific concept, API or documentation reference engineered to help you fix the problem and internalize the prevention.
 
 Every run is persisted as a structured record in your personal telemetry log. Across sessions this builds a clear, queryable history of the issues you encounter most, the complexity distribution of your bugs, and the learning path the system has mapped out for you. The full inference stack runs on-device via Ollama locally. When deployed to Railway the system automatically switches to Gemini and no code changes required
 
