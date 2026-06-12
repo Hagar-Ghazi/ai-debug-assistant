@@ -20,15 +20,7 @@ A locally-hosted AI debugging pipeline that transforms raw programming issues in
 
 ## 🎬 Demo
 
-<!-- ============================================================ -->
-<!--  After pushing to GitHub:                                    -->
-<!--  1. Open any Issue in your repo                              -->
-<!--  2. Drag & drop your .webm file into the comment box         -->
-<!--  3. Copy the generated URL and paste it below                -->
-<!--  4. Delete these comments                                    -->
-<!--                                                             -->
-<!--  https://github.com/user-attachments/assets/xxxxx.webm       -->
-<!-- ============================================================ -->
+https://github.com/user-attachments/assets/ba419c24-a7ff-4372-ba87-d06e774ea1d6
 
 ---
 
