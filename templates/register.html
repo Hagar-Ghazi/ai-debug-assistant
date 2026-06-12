@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Debug Assistant — Register</title>
+  
+  <!-- Correct standalone external link -->
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/auth.css') }}">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">ai-debug-assistant</span>
+    </div>
+
+    <h1>Create account</h1>
+    <p class="subtitle">Set up your personal debug pipeline</p>
+
+    {% if error %}
+    <div class="error-bar">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/register">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="your_username" required autofocus />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" required />
+
+      <!-- Uses the sleek green accent variant configured in auth.css -->
+      <button type="submit" class="btn btn-register">Create account</button>
+    </form>
+
+    <div class="footer-link">
+      Already have an account? <a href="/login">Sign in</a>
+    </div>
+  </div>
+</body>
+</html>

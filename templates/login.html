@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Debug Assistant — Login</title>
+  
+  <!-- Correct standalone external link -->
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/auth.css') }}">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">ai-debug-assistant</span>
+    </div>
+
+    <h1>Sign in</h1>
+    <p class="subtitle">Access your debug pipeline dashboard</p>
+
+    {% if error %}
+    <div class="error-bar">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/login">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="your_username" required autofocus />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" required />
+
+      <button type="submit" class="btn">Sign in</button>
+    </form>
+
+    <div class="footer-link">
+      No account? <a href="/register">Create one</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Debug Assistant — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
+  {% set total = sessions | length %}
+  {% set success_count = sessions | selectattr("ai_status", "equalto", "SUCCESS") | list | length %}
+  {% set failed_count  = sessions | selectattr("ai_status", "equalto", "FAILED")  | list | length %}
+  
+  {% if total > 0 %}
+    {% set success_percent = (success_count / total) * 100 %}
+    {% set failed_percent = (failed_count / total) * 100 %}
+  {% else %}
+    {% set success_percent = 0 %}
+    {% set failed_percent = 0 %}
+  {% endif %}
+
+  <style>
+    :root {
+      --success-width: {{ success_percent }}%;
+      --failed-width: {{ failed_percent }}%;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+        </svg>
+      </div>
+      ai-chat debug-assistant
+    </div>
+    <div class="nav-spacer"></div>
+    <!-- Toggle button completely removed from here -->
+  </nav>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-label">Researcher Profile</div>
+        <div class="profile-card">
+          <div class="profile-tech-icon">
+            <svg class="hex-grid" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 2.5 L93.3 27.5 L93.3 77.5 L50 97.5 L6.7 77.5 L6.7 27.5 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="50" cy="50" r="15" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M50 20 L50 35 M50 65 L50 80 M24 35 L37 42.5 M76 35 L63 42.5 M24 65 L37 57.5 M76 65 L63 57.5" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="profile-name">{{ user.username }}</div>
+          <div class="profile-email">{{ user.email }}</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-label">Session Stats</div>
+        
+        <div class="stat-row">
+          <span class="stat-label">Total runs</span>
+          <div class="stat-container-wrapper">
+            <div class="stat-progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+            <span class="stat-value">{{ total }}</span>
+          </div>
+        </div>
+        
+        <div class="stat-row">
+          <span class="stat-label">Succeeded</span>
+          <div class="stat-container-wrapper">
+            <div class="stat-progress-bar"><div class="progress-fill success" style="width: var(--success-width);"></div></div>
+            <span class="stat-value status-success">{{ success_count }}</span>
+          </div>
+        </div>
+        
+        <div class="stat-row">
+          <span class="stat-label">Failed</span>
+          <div class="stat-container-wrapper">
+            <div class="stat-progress-bar"><div class="progress-fill danger" style="width: var(--failed-width);"></div></div>
+            <span class="stat-value status-danger">{{ failed_count }}</span>
+          </div>
+        </div>
+      </div>
+
+      <a href="/logout" class="logout-btn">Sign out</a>
+    </aside>
+
+    <main class="main">
+
+      <div class="panel">
+        <div class="panel-title">Submit a debug request</div>
+        <div class="panel-sub">Describe your issue and the AI pipeline will classify it, estimate difficulty and recommend a learning path</div>
+
+        <form method="POST" action="/submit">
+          <div class="form-row">
+            <div>
+              <label for="language">Programming language</label>
+              <div class="custom-select-wrapper">
+                <select id="language" name="language" required>
+                  <option value="">Select language</option>
+                  <option>Python</option>
+                  <option>JavaScript</option>
+                  <option>TypeScript</option>
+                  <option>Java</option>
+                  <option>C++</option>
+                  <option>C#</option>
+                  <option>Go</option>
+                  <option>Rust</option>
+                  <option>SQL</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label for="issue_description">Issue description</label>
+            <textarea
+              id="issue_description"
+              name="issue_description"
+              placeholder="Describe the bug, error, or unexpected behavior in detail…"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-footer-actions">
+            <div id="lottie-robot-icon" class="lottie-chat-node"></div>
+            <button type="submit" class="submit-btn">Run analysis</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div class="log-header">
+          <div>
+            <div class="panel-title">Telemetry log</div>
+            <div class="panel-sub" style="margin-bottom: 0;">All AI analysis runs linked to your account</div>
+          </div>
+          <span class="log-count">{{ sessions | length }} entries</span>
+        </div>
+
+        {% if sessions %}
+        <div class="table-responsive-container">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Language</th>
+                <th>Category</th>
+                <th>Difficulty</th>
+                <th>Recommendation</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in sessions %}
+              <tr>
+                <td class="mono-cell text-muted">{{ s.id }}</td>
+                <td class="mono-cell">
+                  <div class="language-pill-badge">
+                    <span>{{ s.language }}</span>
+                  </div>
+                </td>
+                <td>
+                  {% if s.ai_status == "SUCCESS" %}
+                    <span class="category-text-highlight">{{ s.ai_category }}</span>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if s.ai_status == "SUCCESS" %}
+                    {% if s.ai_difficulty == "Beginner" %}
+                      <span class="diff-tag diff-beginner">{{ s.ai_difficulty }}</span>
+                    {% elif s.ai_difficulty == "Intermediate" %}
+                      <span class="diff-tag diff-intermediate">{{ s.ai_difficulty }}</span>
+                    {% else %}
+                      <span class="diff-tag diff-advanced">{{ s.ai_difficulty }}</span>
+                    {% endif %}
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+                <td style="max-width: 320px;">
+                  {% if s.ai_status == "SUCCESS" %}
+                    <span class="recommendation-text-block">{{ s.ai_recommendation }}</span>
+                  {% elif s.ai_status == "FAILED" %}
+                    <span class="text-muted">Analysis failed</span>
+                    {% if s.error_message %}
+                      <div class="error-detail">{{ s.error_message[:120] }}{% if s.error_message|length > 120 %}…{% endif %}</div>
+                    {% endif %}
+                  {% else %}
+                    <span class="status-warning">Pending…</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if s.ai_status == "SUCCESS" %}
+                    <span class="badge badge-success">SUCCESS</span>
+                  {% elif s.ai_status == "FAILED" %}
+                    <span class="badge badge-failed">FAILED</span>
+                  {% else %}
+                    <span class="badge badge-pending">PENDING</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <p>No analysis runs yet please submit your first issue above</p>
+        </div>
+        {% endif %}
+      </div>
+
+    </main>
+  </div>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      lottie.loadAnimation({
+        container: document.getElementById('lottie-robot-icon'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/static/assets/robot-chat.json'
+      });
+    });
+  </script>
+</body>
+</html>
