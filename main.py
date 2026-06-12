@@ -2,29 +2,6 @@ import os
 from fastapi import FastAPI, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
-from starlette.middleware.sessions import SessionMiddleware
-from dotenv import load_dotenv
-import models
-import ai_service
-from database import engine, get_db
-import bcrypt
-
-load_dotenv()
-
-#-------------------------------------------
-#              Bootstrap 
-#-------------------------------------------
-
-models.Base.metadata.create_all(bind = engine)   # Creates tables if they don't exist
-app = FastAPI()
-app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET", "change-me-in-production-please"))
-templates = Jinja2Templates(directory="templates")
-
-import os
-from fastapi import FastAPI, Request, Form, Depends
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles  # <-- Added import
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
@@ -46,7 +23,7 @@ app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET", "change-me-in-production-please"))
 templates = Jinja2Templates(directory="templates")
 # Mount the static directory so FastAPI can read your CSS and animations
-app.mount("/static", StaticFiles(directory="static"), name="static") # <-- Added line
+app.mount("/static", StaticFiles(directory="static"), name="static") 
 
 
 #-------------------------------------------
