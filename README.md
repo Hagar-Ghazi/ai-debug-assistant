@@ -86,7 +86,7 @@ GEMINI_API_KEY present?
         │
        YES → uses Gemini 2.5 Flash  (Railway / cloud deployment)
         │
-        NO  → uses Ollama aya-expanse (your local machine)
+        NO → uses Ollama aya-expanse (your local machine)
 ```
 
 | Environment | AI Backend | Model | Requires |
