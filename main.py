@@ -22,8 +22,13 @@ models.Base.metadata.create_all(bind = engine)
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET", "change-me-in-production-please"))
 templates = Jinja2Templates(directory="templates")
+
+
 # Mount the static directory so FastAPI can read your CSS and animations
-app.mount("/static", StaticFiles(directory="static"), name="static") 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+static_dir = os.path.join(current_dir, "static")
+app.mount("/static", StaticFiles(directory=static_dir), name="static") # Mount using the absolute production path
+# app.mount("/static", StaticFiles(directory="static"), name="static") 
 
 
 #-------------------------------------------
